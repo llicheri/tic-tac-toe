@@ -5,15 +5,19 @@ import { Observable, of } from "rxjs";
 @Injectable({
   providedIn: "root"
 })
-
-// The Observables are used to simulate an async call with the backend
+//
+// The Observables into this service are used to simulate an async call with the backend
+//
 export class GameService {
+  // HIGHSCORES SAVED ON DB
   private _highScores: { name: string; highScores: HighScore[] }[] = [
     {
       name: "lorenzo",
       highScores: [{ time: 1, moves: 2 }, { time: 1, moves: 2 }]
     }
   ];
+  // date of when the game has been started
+  private _startTime: Date;
 
   constructor() {}
 
@@ -24,7 +28,11 @@ export class GameService {
   set currentUser(currentuser: string) {
     localStorage.setItem("currentUser", currentuser);
   }
+  get startTime(): Date {
+    return this._startTime;
+  }
 
+  // return saved highscores
   getUserHighScores(): Observable<HighScore[]> {
     const dbRecord = this._highScores.find(el => el.name === this.currentUser);
     let ret = [];
@@ -34,6 +42,7 @@ export class GameService {
     return of(ret);
   }
 
+  // add an user highscores
   addUserHighscore(highscore: HighScore): Observable<any> {
     const dbRecord = this._highScores.find(el => el.name === this.currentUser);
     // push the new highscore into object
@@ -49,7 +58,9 @@ export class GameService {
     return of();
   }
 
+  // initialize the game
   startGame(): Observable<any> {
+    this._startTime = new Date();
     return of(true);
   }
 }

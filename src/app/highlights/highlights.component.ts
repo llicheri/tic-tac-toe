@@ -3,7 +3,7 @@ import { HighScore } from "../models/highlight";
 import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: "app-highlights",
+  selector: "app-highscores",
   templateUrl: "./highlights.component.html",
   styleUrls: ["./highlights.component.css"]
 })
