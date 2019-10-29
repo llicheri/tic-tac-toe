@@ -7,15 +7,16 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./game.component.css"]
 })
 export class GameComponent implements OnInit {
-  private _startTime: Date;
+  game: any[] = ["X", "", "", "", "O", "X", "", "", ""];
+  // crono
   crono: string = "00:00";
+  // semaphore to render crono
   viewCrono = false;
 
   constructor(private gameService: GameService) {}
 
   ngOnInit() {
-    this._startTime = this.gameService.startTime;
-    if (this._startTime) {
+    if (this.gameService.startTime) {
       this.startCrono();
       this.viewCrono = true;
     }
@@ -24,7 +25,7 @@ export class GameComponent implements OnInit {
   startCrono(): void {
     setInterval(() => {
       const now = new Date().getTime();
-      const duration = now - this._startTime.getTime(); // milliseconds
+      const duration = now - this.gameService.startTime.getTime(); // milliseconds
       let seconds: any = Math.floor((duration / 1000) % 60);
       let minutes: any = Math.floor((duration / (1000 * 60)) % 60);
 

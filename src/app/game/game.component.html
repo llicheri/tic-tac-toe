@@ -3,7 +3,100 @@
 </h1>
 <div class="row">
   <div class="col-8">
-    TODO: GAMES
+    <form>
+      <div class="board">
+        <div class="cell cell--1">
+          <div
+            class="mark"
+            [ngClass]="{
+              'mark--x': game[0] === 'X',
+              'mark--o': game[0] === 'O'
+            }"
+            [ngStyle]="{ display: game[0] ? 'block' : '' }"
+          ></div>
+        </div>
+        <div class="cell cell--2">
+          <div
+            class="mark"
+            [ngClass]="{
+              'mark--x': game[1] === 'X',
+              'mark--o': game[1] === 'O'
+            }"
+            [ngStyle]="{ display: game[1] ? 'block' : '' }"
+          ></div>
+        </div>
+        <div class="cell cell--3">
+          <div
+            class="mark"
+            [ngClass]="{
+              'mark--x': game[2] === 'X',
+              'mark--o': game[2] === 'O'
+            }"
+            [ngStyle]="{ display: game[2] ? 'block' : '' }"
+          ></div>
+        </div>
+        <div class="cell cell--4">
+          <div
+            class="mark"
+            [ngClass]="{
+              'mark--x': game[3] === 'X',
+              'mark--o': game[3] === 'O'
+            }"
+            [ngStyle]="{ display: game[3] ? 'block' : '' }"
+          ></div>
+        </div>
+        <div class="cell cell--5">
+          <div
+            class="mark"
+            [ngClass]="{
+              'mark--x': game[4] === 'X',
+              'mark--o': game[4] === 'O'
+            }"
+            [ngStyle]="{ display: game[4] ? 'block' : '' }"
+          ></div>
+        </div>
+        <div class="cell cell--6">
+          <div
+            class="mark"
+            [ngClass]="{
+              'mark--x': game[5] === 'X',
+              'mark--o': game[5] === 'O'
+            }"
+            [ngStyle]="{ display: game[5] ? 'block' : '' }"
+          ></div>
+        </div>
+        <div class="cell cell--7">
+          <div
+            class="mark"
+            [ngClass]="{
+              'mark--x': game[6] === 'X',
+              'mark--o': game[6] === 'O'
+            }"
+            [ngStyle]="{ display: game[6] ? 'block' : '' }"
+          ></div>
+        </div>
+        <div class="cell cell--8">
+          <div
+            class="mark"
+            [ngClass]="{
+              'mark--x': game[7] === 'X',
+              'mark--o': game[7] === 'O'
+            }"
+            [ngStyle]="{ display: game[7] ? 'block' : '' }"
+          ></div>
+        </div>
+        <div class="cell cell--9">
+          <div
+            class="mark"
+            [ngClass]="{
+              'mark--x': game[8] === 'X',
+              'mark--o': game[8] === 'O'
+            }"
+            [ngStyle]="{ display: game[8] ? 'block' : '' }"
+          ></div>
+        </div>
+      </div>
+    </form>
   </div>
   <div class="col-4">
     <app-highscores></app-highscores>
