@@ -40,5 +40,6 @@ export class HomeComponent implements OnInit {
     this.currentUser = this.loginName;
     this.gameService.currentUser = this.loginName;
     this.isLoggingIn = false;
+    this.loginName = "";
   }
 }
