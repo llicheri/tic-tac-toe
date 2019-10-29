@@ -10,12 +10,7 @@ import { Observable, of } from "rxjs";
 //
 export class GameService {
   // HIGHSCORES SAVED ON DB
-  private _highScores: { name: string; highScores: HighScore[] }[] = [
-    {
-      name: "lorenzo",
-      highScores: [{ time: 1, moves: 2 }, { time: 1, moves: 2 }]
-    }
-  ];
+  private _highScores: { name: string; highScores: HighScore[] }[] = [];
   // date of when the game has been started
   private _startTime: Date;
   //
@@ -45,6 +40,9 @@ export class GameService {
     if (dbRecord) {
       ret = dbRecord.highScores;
     }
+    ret = ret.sort((a, b) => {
+      return Number(a.time > b.time);
+    });
     return of(ret);
   }
 
@@ -67,6 +65,8 @@ export class GameService {
   // initialize the game
   startGame(): Observable<any> {
     this._startTime = new Date();
+    this._moveCounter = 0;
+    this.game = ["", "", "", "", "", "", "", "", ""];
     return of(true);
   }
 
