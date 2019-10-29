@@ -1,6 +1,7 @@
 import { GameService } from "../game.service";
 import { Component, OnInit } from "@angular/core";
 import { GameValue } from "../models";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-game",
@@ -13,10 +14,14 @@ export class GameComponent implements OnInit {
   crono: string = "00:00";
   // semaphore to render crono
   viewCrono = false;
+  //
+  message: string;
 
-  constructor(private gameService: GameService) {
+  constructor(private gameService: GameService, private router: Router) {
     gameService.gameFinish.subscribe(result => {
-      console.log(result);
+      // when game finish alert and go back to home
+      alert(result);
+      this.router.navigateByUrl("home");
     });
   }
 

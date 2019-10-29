@@ -18,6 +18,8 @@ export class GameService {
   ];
   // date of when the game has been started
   private _startTime: Date;
+  //
+  private _moveCounter: number = 0;
   // current game
   game: GameValue[] = ["", "", "", "", "", "", "", "", ""];
   //
@@ -133,18 +135,27 @@ export class GameService {
     return winner;
   }
 
+  saveWin() {
+    const time = new Date().getTime() - this._startTime.getTime();
+    this.addUserHighscore({ moves: this._moveCounter, time: time });
+  }
+
   // functionCalled when a user click on a cell
   userClick(index: number): Observable<GameValue[]> {
+    // increment move counter
+    this._moveCounter++;
     // cross user cell
     this.game[index] = "X";
     // CALCULATE IA CLICK
-    this.game[this.getRndmIndex()] = "O";
+    if (!this.whoWin()) {
+      this.game[this.getRndmIndex()] = "O";
+    }
     // calculate if someone wins
     const winner = this.whoWin();
     if (winner === "X") {
       // win user
       this.gameFinish.emit("win");
-      // this.saveWin();
+      this.saveWin();
     } else if (winner === "O") {
       // win IA
       this.gameFinish.emit("lose");
