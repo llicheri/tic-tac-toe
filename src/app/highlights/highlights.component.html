@@ -2,11 +2,21 @@
   HIGHSCORES
 </h2>
 <div *ngIf="!!highlights" class="row justify-content-center">
-  <ul *ngIf="highlights.length">
-    <li *ngFor="let el of highlights; let i = index">
-      <!-- TODO: show correct highlight -->
-      {{ i }}
-    </li>
-  </ul>
+  <table class="table col-6" *ngIf="highlights.length">
+    <thead>
+      <tr>
+        <th scope="col">TIME</th>
+        <th scope="col">MOVES</th>
+        <th scope="col">AGGREGATE</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let el of highlights; let i = index">
+        <td scope="col">{{ el.time }}</td>
+        <td scope="col">{{ el.moves }}</td>
+        <td scope="col">{{ el.aggregate }}</td>
+      </tr>
+    </tbody>
+  </table>
   <h4 *ngIf="!highlights.length">No highscores availables</h4>
 </div>

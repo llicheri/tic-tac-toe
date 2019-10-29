@@ -7,7 +7,7 @@ import { Component, OnInit } from "@angular/core";
   templateUrl: "./highlights.component.html",
   styleUrls: ["./highlights.component.css"]
 })
-export class HighlightsComponent implements OnInit {
+export class HighScoreComponent implements OnInit {
   highlights: HighScore[] = [];
 
   constructor(private gameService: GameService) {}
