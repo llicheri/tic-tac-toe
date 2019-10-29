@@ -1,3 +1,13 @@
+# TODO: The missing development points
+
+- Create on the game page a button to go back.
+- Guarantee the possibility to the user to restart a new match directly
+- Replace the alert opened after the game finish with a modal.
+- View only the last 10 results.
+- Create into the high score data aggregation to sort records merging logically the time and moves data.
+- Create an IA algorithm to computer moves
+- Create an application header.
+
 # Assignment: “Tic-Tac-Toe or 4-in-a-row Game”
 
 Implement the game of Tic-Tac-Toe based on the product backlog below. You do not have to support all requirements: choose whatever you're comfortable with to implement. Work on your solution for a max of 4 hours. When done or time runs out, write down what you would like to improve in the future.
