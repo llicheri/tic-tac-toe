@@ -1,27 +1,50 @@
-# TicTacToe
+# Assignment: “Tic-Tac-Toe or 4-in-a-row Game”
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.2.
+Implement the game of Tic-Tac-Toe based on the product backlog below. You do not have to support all requirements: choose whatever you're comfortable with to implement. Work on your solution for a max of 4 hours. When done or time runs out, write down what you would like to improve in the future.
 
-## Development server
+Build a simple single-page-app frontend. Bonus: if you're comfortable to do so, you can also build a server backend and provide all business logic and game state tracking by the backend server. If not, just keep everything client-side, but do keep your business logic and game state separate from the UI code.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Please take the following into account:
 
-## Code scaffolding
+- Readability and comprehensibility of the code (Clean code)
+- Testing your solution (e.g Unit testing)
+- Conscious design/technical decisions
+- Simplicity of the solution
+- Consistent and proper use of programming paradigms such as object oriented programming, functional programming
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Code: Commit each step during your development in a Github repo so we can study your reasoning and progress.
 
-## Build
+Have fun doing the assignment and make a nice application!
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+# Product backlog
 
-## Running unit tests
+## As a player I want to play Tic-Tac-Toe against the computer so that I can entertain myself.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Acceptance criteria
 
-## Running end-to-end tests
+- The user and the computer take turns playing.
+- The first player to achieve three-in-a-row wins.
+- Three-in-a-row can be horizontal, vertical or diagonal.
+- When the game ends a new game can be started.
+- The achieved score is registered.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## As a player I want my top scores to be registered so that I can review my accomplishments.
 
-## Further help
+Acceptance criteria
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+- The score is calculated based on the lowest number of moves combined with the duration of the game. (you don't get points when you lose, and you can assume that the time taken by the computer is negligible)
+- Only the top 10 scores are kept.
+- The scores can be tracked in memory, they don't need to be persisted to a data store.
+
+## As a player I want to register my name so that others can see who achieved what score.
+
+Acceptance criteria
+
+- The user can enter their name when the game starts.
+
+## As a player I want to see my current score compared to that of other players so that I know how well I'm currently doing.
+
+Acceptance criteria
+
+- The score of the current game is always displayed.
+- The current score is shown in comparison to the top scores.
