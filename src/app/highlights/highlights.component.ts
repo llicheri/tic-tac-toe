@@ -17,4 +17,14 @@ export class HighScoreComponent implements OnInit {
       this.highlights = res;
     });
   }
+
+  formatTime(milli: number): string {
+    let seconds: any = Math.floor((milli / 1000) % 60);
+    let minutes: any = Math.floor((milli / (1000 * 60)) % 60);
+
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    return minutes + ":" + seconds;
+  }
 }

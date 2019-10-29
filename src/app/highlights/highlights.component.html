@@ -7,14 +7,14 @@
       <tr>
         <th scope="col">TIME</th>
         <th scope="col">MOVES</th>
-        <th scope="col">AGGREGATE</th>
+        <!-- <th scope="col">AGGREGATE</th> -->
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let el of highlights; let i = index">
-        <td scope="col">{{ el.time }}</td>
+        <td scope="col">{{ formatTime(el.time) }}</td>
         <td scope="col">{{ el.moves }}</td>
-        <td scope="col">{{ el.aggregate }}</td>
+        <!-- <td scope="col">{{ el.aggregate }}</td> -->
       </tr>
     </tbody>
   </table>
