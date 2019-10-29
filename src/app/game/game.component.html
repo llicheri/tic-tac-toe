@@ -5,7 +5,7 @@
   <div class="col-8">
     <form>
       <div class="board">
-        <div class="cell cell--1">
+        <div (click)="onCellClick(0)" class="cell cell--1">
           <div
             class="mark"
             [ngClass]="{
@@ -15,7 +15,7 @@
             [ngStyle]="{ display: game[0] ? 'block' : '' }"
           ></div>
         </div>
-        <div class="cell cell--2">
+        <div (click)="onCellClick(1)" class="cell cell--2">
           <div
             class="mark"
             [ngClass]="{
@@ -25,7 +25,7 @@
             [ngStyle]="{ display: game[1] ? 'block' : '' }"
           ></div>
         </div>
-        <div class="cell cell--3">
+        <div (click)="onCellClick(2)" class="cell cell--3">
           <div
             class="mark"
             [ngClass]="{
@@ -35,7 +35,7 @@
             [ngStyle]="{ display: game[2] ? 'block' : '' }"
           ></div>
         </div>
-        <div class="cell cell--4">
+        <div (click)="onCellClick(3)" class="cell cell--4">
           <div
             class="mark"
             [ngClass]="{
@@ -45,7 +45,7 @@
             [ngStyle]="{ display: game[3] ? 'block' : '' }"
           ></div>
         </div>
-        <div class="cell cell--5">
+        <div (click)="onCellClick(4)" class="cell cell--5">
           <div
             class="mark"
             [ngClass]="{
@@ -55,7 +55,7 @@
             [ngStyle]="{ display: game[4] ? 'block' : '' }"
           ></div>
         </div>
-        <div class="cell cell--6">
+        <div (click)="onCellClick(5)" class="cell cell--6">
           <div
             class="mark"
             [ngClass]="{
@@ -65,7 +65,7 @@
             [ngStyle]="{ display: game[5] ? 'block' : '' }"
           ></div>
         </div>
-        <div class="cell cell--7">
+        <div (click)="onCellClick(6)" class="cell cell--7">
           <div
             class="mark"
             [ngClass]="{
@@ -75,7 +75,7 @@
             [ngStyle]="{ display: game[6] ? 'block' : '' }"
           ></div>
         </div>
-        <div class="cell cell--8">
+        <div (click)="onCellClick(7)" class="cell cell--8">
           <div
             class="mark"
             [ngClass]="{
@@ -85,7 +85,7 @@
             [ngStyle]="{ display: game[7] ? 'block' : '' }"
           ></div>
         </div>
-        <div class="cell cell--9">
+        <div (click)="onCellClick(8)" class="cell cell--9">
           <div
             class="mark"
             [ngClass]="{

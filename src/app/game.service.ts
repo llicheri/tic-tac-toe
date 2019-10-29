@@ -1,5 +1,5 @@
-import { HighScore } from "./models";
-import { Injectable } from "@angular/core";
+import { HighScore, GameValue, GameResult } from "./models";
+import { Injectable, EventEmitter } from "@angular/core";
 import { Observable, of } from "rxjs";
 
 @Injectable({
@@ -18,6 +18,10 @@ export class GameService {
   ];
   // date of when the game has been started
   private _startTime: Date;
+  // current game
+  game: GameValue[] = ["", "", "", "", "", "", "", "", ""];
+  //
+  gameFinish: EventEmitter<GameResult> = new EventEmitter();
 
   constructor() {}
 
@@ -62,5 +66,93 @@ export class GameService {
   startGame(): Observable<any> {
     this._startTime = new Date();
     return of(true);
+  }
+
+  // this method returns a randon index of the cell the IA crosses
+  private getRndmIndex() {
+    const indexes = [];
+    this.game.forEach((el, index) => {
+      if (el === "") {
+        indexes.push(index);
+      }
+    });
+    var rndm = Math.floor(Math.random() * indexes.length);
+    return indexes[rndm];
+  }
+
+  private playerToNum(player: GameValue): number {
+    let ret = 0;
+    switch (player) {
+      case "O":
+        ret = -1;
+        break;
+      case "X":
+        ret = 1;
+        break;
+    }
+    return ret;
+  }
+
+  // calculate if there si a winner
+  private whoWin(): GameValue {
+    let winner: GameValue = "";
+    const matrix: number[][] = [
+      [
+        this.playerToNum(this.game[0]),
+        this.playerToNum(this.game[1]),
+        this.playerToNum(this.game[2])
+      ],
+      [
+        this.playerToNum(this.game[3]),
+        this.playerToNum(this.game[4]),
+        this.playerToNum(this.game[5])
+      ],
+      [
+        this.playerToNum(this.game[6]),
+        this.playerToNum(this.game[7]),
+        this.playerToNum(this.game[8])
+      ]
+    ];
+    const sums = [
+      matrix[0][0] + matrix[0][1] + matrix[0][2],
+      matrix[1][0] + matrix[1][1] + matrix[1][2],
+      matrix[2][0] + matrix[2][1] + matrix[2][2],
+      matrix[0][0] + matrix[1][0] + matrix[2][0],
+      matrix[0][1] + matrix[1][1] + matrix[2][1],
+      matrix[0][2] + matrix[1][2] + matrix[2][2],
+      matrix[0][0] + matrix[1][1] + matrix[2][2],
+      matrix[0][2] + matrix[1][1] + matrix[2][0]
+    ];
+
+    if (sums.indexOf(3) >= 0) {
+      winner = "X";
+    } else if (sums.indexOf(-3) >= 0) {
+      winner = "O";
+    }
+
+    return winner;
+  }
+
+  // functionCalled when a user click on a cell
+  userClick(index: number): Observable<GameValue[]> {
+    // cross user cell
+    this.game[index] = "X";
+    // CALCULATE IA CLICK
+    this.game[this.getRndmIndex()] = "O";
+    // calculate if someone wins
+    const winner = this.whoWin();
+    if (winner === "X") {
+      // win user
+      this.gameFinish.emit("win");
+      // this.saveWin();
+    } else if (winner === "O") {
+      // win IA
+      this.gameFinish.emit("lose");
+    } else if (this.game.indexOf("") < 0) {
+      // parity
+      this.gameFinish.emit("parity");
+    }
+    // return game to component
+    return of(this.game);
   }
 }

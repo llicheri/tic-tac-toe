@@ -1,5 +1,6 @@
 import { GameService } from "../game.service";
 import { Component, OnInit } from "@angular/core";
+import { GameValue } from "../models";
 
 @Component({
   selector: "app-game",
@@ -7,13 +8,17 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./game.component.css"]
 })
 export class GameComponent implements OnInit {
-  game: any[] = ["X", "", "", "", "O", "X", "", "", ""];
+  game: GameValue[] = ["", "", "", "", "", "", "", "", ""];
   // crono
   crono: string = "00:00";
   // semaphore to render crono
   viewCrono = false;
 
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService) {
+    gameService.gameFinish.subscribe(result => {
+      console.log(result);
+    });
+  }
 
   ngOnInit() {
     if (this.gameService.startTime) {
@@ -34,5 +39,13 @@ export class GameComponent implements OnInit {
 
       this.crono = minutes + ":" + seconds;
     }, 1000);
+  }
+
+  onCellClick(index: number) {
+    if (this.game[index] === "") {
+      this.gameService.userClick(index).subscribe(newGame => {
+        this.game = newGame;
+      });
+    }
   }
 }
