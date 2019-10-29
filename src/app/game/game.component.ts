@@ -1,14 +1,15 @@
 import { GameService } from "../game.service";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { GameValue } from "../models";
 import { Router } from "@angular/router";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-game",
   templateUrl: "./game.component.html",
   styleUrls: ["./game.component.css"]
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
   game: GameValue[] = ["", "", "", "", "", "", "", "", ""];
   // crono
   crono: string = "00:00";
@@ -16,9 +17,11 @@ export class GameComponent implements OnInit {
   viewCrono = false;
   //
   message: string;
+  //
+  sub: Subscription;
 
   constructor(private gameService: GameService, private router: Router) {
-    gameService.gameFinish.subscribe(result => {
+    this.sub = gameService.gameFinish.subscribe(result => {
       // when game finish alert and go back to home
       alert(result);
       this.router.navigateByUrl("home");
@@ -30,6 +33,10 @@ export class GameComponent implements OnInit {
       this.startCrono();
       this.viewCrono = true;
     }
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   startCrono(): void {
