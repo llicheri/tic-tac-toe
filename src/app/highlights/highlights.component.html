@@ -1,9 +1,12 @@
 <h2 class="row justify-content-center">
-  HIGHLIGHTS
+  HIGHSCORES
 </h2>
-<div class="row justify-content-center">
-  <ul>
-    <li>Score 1</li>
-    <li>Score 2</li>
+<div *ngIf="!!highlights" class="row justify-content-center">
+  <ul *ngIf="highlights.length">
+    <li *ngFor="let el of highlights; let i = index">
+      <!-- TODO: show correct highlight -->
+      {{ i }}
+    </li>
   </ul>
+  <h4 *ngIf="!highlights.length">No highscores availables</h4>
 </div>

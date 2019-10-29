@@ -1,4 +1,4 @@
-export interface HighLight {
+export interface HighScore {
   /** used seconds */
   time: number;
   /** used moves */
