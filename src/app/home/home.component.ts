@@ -8,8 +8,11 @@ import { Router } from "@angular/router";
   styleUrls: ["./home.component.css"]
 })
 export class HomeComponent implements OnInit {
+  // user logged
   currentUser: string;
+  // is user logging in?
   isLoggingIn: boolean = false;
+  // name typed by user
   loginName: string;
 
   constructor(private gameService: GameService, private router: Router) {}
@@ -19,7 +22,9 @@ export class HomeComponent implements OnInit {
   }
 
   startGame() {
-    //
+    this.gameService.startGame().subscribe(() => {
+      this.router.navigateByUrl("game");
+    });
   }
 
   login() {

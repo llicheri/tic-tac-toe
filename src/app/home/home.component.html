@@ -43,14 +43,6 @@
   </button>
 </form>
 <!-- highlights -->
-<div class="mt-3">
-  <h2 class="row justify-content-center">
-    HIGHLIGHTS
-  </h2>
-  <div class="row justify-content-center">
-    <ul>
-      <li>Score 1</li>
-      <li>Score 2</li>
-    </ul>
-  </div>
+<div *ngIf="currentUser" class="mt-3">
+  <app-highlights></app-highlights>
 </div>

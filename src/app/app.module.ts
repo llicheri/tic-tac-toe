@@ -5,6 +5,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { HomeComponent } from "./home/home.component";
 import { GameComponent } from "./game/game.component";
 import { FormsModule } from "@angular/forms";
+import { HighlightsComponent } from './highlights/highlights.component';
 
 export const routes: Routes = [
   { path: "home", pathMatch: "full", component: HomeComponent },
@@ -13,7 +14,7 @@ export const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, GameComponent],
+  declarations: [AppComponent, HomeComponent, GameComponent, HighlightsComponent],
   imports: [BrowserModule, RouterModule.forRoot(routes), FormsModule],
   providers: [],
   bootstrap: [AppComponent],
