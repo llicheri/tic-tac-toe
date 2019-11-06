@@ -1,8 +1,10 @@
-import { Board } from "./../models/index";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Board } from "./../models";
 import { GameService } from "../game.service";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
+import { ViewChild } from "@angular/core";
 
 @Component({
   selector: "app-game",
@@ -10,28 +12,38 @@ import { Subscription } from "rxjs";
   styleUrls: ["./game.component.css"]
 })
 export class GameComponent implements OnInit, OnDestroy {
-  board: Board = ["", "", "", "", "", "", "", "", ""];
+  // modal
+  @ViewChild("modal", null) private modal;
+  // game board
+  board: Board;
   // crono
   crono: string = "00:00";
   // semaphore to render crono
   viewCrono = false;
   //
-  message: string;
+  message: string = "";
   //
   sub: Subscription;
 
-  constructor(private gameService: GameService, private router: Router) {
+  constructor(
+    private gameService: GameService,
+    private router: Router,
+    private modalService: NgbModal
+  ) {
     this.sub = gameService.gameFinish.subscribe(result => {
-      // when game finish alert and go back to home
-      alert(result);
-      this.router.navigateByUrl("home");
+      this.message = result;
+      this.openModal();
     });
   }
 
   ngOnInit() {
-    if (this.gameService.match.startTime) {
+    if (this.gameService.match && this.gameService.match.startTime) {
+      this.board = ["", "", "", "", "", "", "", "", ""];
       this.startCrono();
       this.viewCrono = true;
+    } else {
+      // on page refresh go to home
+      this.router.navigateByUrl("home");
     }
   }
 
@@ -59,5 +71,27 @@ export class GameComponent implements OnInit, OnDestroy {
         this.board = newGame;
       });
     }
+  }
+
+  openModal() {
+    this.modalService
+      .open(this.modal, { ariaLabelledBy: "modal-basic-title" })
+      .result.then(
+        result => {
+          switch (result) {
+            case "home":
+              this.router.navigateByUrl("home");
+              break;
+            case "newGame":
+              this.gameService.startGame().subscribe(() => {
+                this.ngOnInit();
+              });
+              break;
+          }
+        },
+        reason => {
+          this.router.navigateByUrl("home");
+        }
+      );
   }
 }

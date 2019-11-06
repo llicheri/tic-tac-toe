@@ -102,3 +102,36 @@
     <app-highscores></app-highscores>
   </div>
 </div>
+<!-- modal -->
+<ng-template #modal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    {{ message }}
+  </div>
+  <div class="modal-footer justify-content-between">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="modal.close('newGame')"
+    >
+      New game
+    </button>
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="modal.close('home')"
+    >
+      Back to home
+    </button>
+  </div>
+</ng-template>

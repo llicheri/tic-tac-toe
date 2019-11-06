@@ -7,6 +7,7 @@ import { GameComponent } from "./game/game.component";
 import { FormsModule } from "@angular/forms";
 import { HighScoreComponent } from "./highlights/highlights.component";
 import { GameService } from "./game.service";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
 export const routes: Routes = [
   { path: "home", pathMatch: "full", component: HomeComponent },
@@ -22,7 +23,8 @@ export const declComponents: any[] = [
 export const imports: any[] = [
   BrowserModule,
   RouterModule.forRoot(routes),
-  FormsModule
+  FormsModule,
+  NgbModule
 ];
 
 @NgModule({
