@@ -1,6 +1,6 @@
+import { Board } from "./../models/index";
 import { GameService } from "../game.service";
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { GameValue } from "../models";
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
 
@@ -10,7 +10,7 @@ import { Subscription } from "rxjs";
   styleUrls: ["./game.component.css"]
 })
 export class GameComponent implements OnInit, OnDestroy {
-  game: GameValue[] = ["", "", "", "", "", "", "", "", ""];
+  board: Board = ["", "", "", "", "", "", "", "", ""];
   // crono
   crono: string = "00:00";
   // semaphore to render crono
@@ -29,7 +29,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.gameService.startTime) {
+    if (this.gameService.match.startTime) {
       this.startCrono();
       this.viewCrono = true;
     }
@@ -42,7 +42,7 @@ export class GameComponent implements OnInit, OnDestroy {
   startCrono(): void {
     setInterval(() => {
       const now = new Date().getTime();
-      const duration = now - this.gameService.startTime.getTime(); // milliseconds
+      const duration = now - this.gameService.match.startTime.getTime(); // milliseconds
       let seconds: any = Math.floor((duration / 1000) % 60);
       let minutes: any = Math.floor((duration / (1000 * 60)) % 60);
 
@@ -54,9 +54,9 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   onCellClick(index: number) {
-    if (this.game[index] === "") {
+    if (this.board[index] === "") {
       this.gameService.userClick(index).subscribe(newGame => {
-        this.game = newGame;
+        this.board = newGame;
       });
     }
   }

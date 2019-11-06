@@ -1,5 +1,5 @@
 import { GameService } from "../game.service";
-import { HighScore } from "../models/highlight";
+import { HighScore } from "../models/highscore";
 import { Component, OnInit } from "@angular/core";
 
 @Component({

@@ -1,4 +1,4 @@
-import { HighScore, GameValue, GameResult } from "./models";
+import { HighScore, GameValue, GameResult, Match, User } from "./models";
 import { Injectable, EventEmitter } from "@angular/core";
 import { Observable, of } from "rxjs";
 
@@ -9,15 +9,36 @@ import { Observable, of } from "rxjs";
 // The Observables into this service are used to simulate an async call with the backend
 //
 export class GameService {
+  // actual match
+  private _match: Match;
+  public get match(): Match {
+    return this._match;
+  }
   // HIGHSCORES SAVED ON DB
-  private _highScores: { name: string; highScores: HighScore[] }[] = [];
-  // date of when the game has been started
-  private _startTime: Date;
-  //
-  private _moveCounter: number = 0;
-  // current game
-  game: GameValue[] = ["", "", "", "", "", "", "", "", ""];
-  //
+  get usersHighScores(): User[] {
+    const local = localStorage.getItem("usersHighScores");
+    return local ? JSON.parse(local) : [];
+  }
+  private addHighScore(highScore: HighScore) {
+    // add highscore only if the user is logged in
+    if (this.currentUser) {
+      const userHighScores = this.usersHighScores;
+      const dbRecord = userHighScores.find(el => el.name === this.currentUser);
+      // push the new highscore into object
+      if (dbRecord) {
+        dbRecord.highScores.push(highScore);
+      } else {
+        // for first highscore create the object
+        userHighScores.push({
+          name: this.currentUser,
+          highScores: [highScore]
+        });
+      }
+      // update local storage object
+      localStorage.setItem("usersHighScores", JSON.stringify(userHighScores));
+    }
+  }
+  // emitter of the finish of the game
   gameFinish: EventEmitter<GameResult> = new EventEmitter();
 
   constructor() {}
@@ -27,15 +48,18 @@ export class GameService {
     return local ? local : null;
   }
   set currentUser(currentuser: string) {
-    localStorage.setItem("currentUser", currentuser);
-  }
-  get startTime(): Date {
-    return this._startTime;
+    if (currentuser) {
+      localStorage.setItem("currentUser", currentuser);
+    } else {
+      localStorage.removeItem("currentUser");
+    }
   }
 
   // return saved highscores
-  getUserHighScores(): Observable<HighScore[]> {
-    const dbRecord = this._highScores.find(el => el.name === this.currentUser);
+  getUserHighScores(limit = 10): Observable<HighScore[]> {
+    const dbRecord = this.usersHighScores.find(
+      el => el.name === this.currentUser
+    );
     let ret = [];
     if (dbRecord) {
       ret = dbRecord.highScores;
@@ -43,76 +67,40 @@ export class GameService {
     ret = ret.sort((a, b) => {
       return Number(a.time > b.time);
     });
+    // take only decided range elements
+    ret = ret.slice(0, limit);
     return of(ret);
-  }
-
-  // add an user highscores
-  addUserHighscore(highscore: HighScore): Observable<any> {
-    const dbRecord = this._highScores.find(el => el.name === this.currentUser);
-    // push the new highscore into object
-    if (dbRecord) {
-      dbRecord.highScores.push(highscore);
-    } else {
-      // for first highscore create the object
-      this._highScores.push({
-        name: this.currentUser,
-        highScores: [highscore]
-      });
-    }
-    return of();
   }
 
   // initialize the game
   startGame(): Observable<any> {
-    this._startTime = new Date();
-    this._moveCounter = 0;
-    this.game = ["", "", "", "", "", "", "", "", ""];
+    this._match = new Match();
     return of(true);
   }
 
-  // this method returns a randon index of the cell the IA crosses
-  private getRndmIndex() {
-    const indexes = [];
-    this.game.forEach((el, index) => {
-      if (el === "") {
-        indexes.push(index);
-      }
-    });
-    var rndm = Math.floor(Math.random() * indexes.length);
-    return indexes[rndm];
-  }
-
-  private playerToNum(player: GameValue): number {
-    let ret = 0;
-    switch (player) {
-      case "O":
-        ret = -1;
-        break;
-      case "X":
-        ret = 1;
-        break;
-    }
-    return ret;
-  }
-
   // calculate if there si a winner
-  private whoWin(): GameValue {
-    let winner: GameValue = "";
+  private calculateWinner() {
+    // map from player to num
+    const playerToNum = {
+      "": 0,
+      X: 1,
+      O: -1
+    };
     const matrix: number[][] = [
       [
-        this.playerToNum(this.game[0]),
-        this.playerToNum(this.game[1]),
-        this.playerToNum(this.game[2])
+        playerToNum[this.match.boardGame.getCellValue(0)],
+        playerToNum[this.match.boardGame.getCellValue(1)],
+        playerToNum[this.match.boardGame.getCellValue(2)]
       ],
       [
-        this.playerToNum(this.game[3]),
-        this.playerToNum(this.game[4]),
-        this.playerToNum(this.game[5])
+        playerToNum[this.match.boardGame.getCellValue(3)],
+        playerToNum[this.match.boardGame.getCellValue(4)],
+        playerToNum[this.match.boardGame.getCellValue(5)]
       ],
       [
-        this.playerToNum(this.game[6]),
-        this.playerToNum(this.game[7]),
-        this.playerToNum(this.game[8])
+        playerToNum[this.match.boardGame.getCellValue(6)],
+        playerToNum[this.match.boardGame.getCellValue(7)],
+        playerToNum[this.match.boardGame.getCellValue(8)]
       ]
     ];
     const sums = [
@@ -127,43 +115,48 @@ export class GameService {
     ];
 
     if (sums.indexOf(3) >= 0) {
-      winner = "X";
+      this.match.winner = "X";
+      this.match.gameResult = "win";
     } else if (sums.indexOf(-3) >= 0) {
-      winner = "O";
+      this.match.winner = "O";
+      this.match.gameResult = "lose";
+    } else if (this.match.boardGame.board.indexOf("") < 0) {
+      this.match.gameResult = "parity";
     }
-
-    return winner;
   }
 
   saveWin() {
-    const time = new Date().getTime() - this._startTime.getTime();
-    this.addUserHighscore({ moves: this._moveCounter, time: time });
+    this.match.initEndTime();
+    const highscore: HighScore = {
+      moves: this.match.moveCounter,
+      time: this.match.endTime.getTime() - this.match.startTime.getTime()
+    };
+    this.addHighScore(highscore);
   }
 
   // functionCalled when a user click on a cell
   userClick(index: number): Observable<GameValue[]> {
     // increment move counter
-    this._moveCounter++;
+    this.match.incrementMoveCounter();
     // cross user cell
-    this.game[index] = "X";
+    this.match.boardGame.crossCell(index, "X");
+    // calculate if user wins
+    this.calculateWinner();
     // CALCULATE IA CLICK
-    if (!this.whoWin()) {
-      this.game[this.getRndmIndex()] = "O";
+    if (!this.match.winner) {
+      this.match.boardGame.crossRandomIACell();
+      // calculate if ia wins
+      this.calculateWinner();
     }
-    // calculate if someone wins
-    const winner = this.whoWin();
-    if (winner === "X") {
-      // win user
-      this.gameFinish.emit("win");
-      this.saveWin();
-    } else if (winner === "O") {
-      // win IA
-      this.gameFinish.emit("lose");
-    } else if (this.game.indexOf("") < 0) {
-      // parity
-      this.gameFinish.emit("parity");
+    //  if match is finish emit the result
+    if (this.match.gameResult !== "ongoing") {
+      this.gameFinish.emit(this.match.gameResult);
+      // if game has beeen win save the highscore
+      if (this.match.gameResult === "win") {
+        this.saveWin();
+      }
     }
     // return game to component
-    return of(this.game);
+    return of(this.match.boardGame.board);
   }
 }
